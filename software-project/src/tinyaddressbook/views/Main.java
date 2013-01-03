@@ -11,6 +11,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 public class Main extends JFrame {
 
@@ -35,7 +38,8 @@ public class Main extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main() {
+	public Main() 
+	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/book.png")));
 		setTitle("Tiny Address Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,10 +52,33 @@ public class Main extends JFrame {
 		menuBar.add(mnRubrica);
 		
 		JMenuItem mntmTuttiIContatti = new JMenuItem("Tutti i Contatti");
+		mntmTuttiIContatti.addActionListener(new ActionListener() {
+			/**
+			 * @todo Caricare tutta la rubrica
+			 */
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				
+			}
+		});
 		mntmTuttiIContatti.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/book_open.png")));
 		mnRubrica.add(mntmTuttiIContatti);
 		
 		JMenuItem mntmNuovoContantto = new JMenuItem("Nuovo Contatto");
+		mntmNuovoContantto.addActionListener(new ActionListener() {
+			
+			/**
+			 * @todo Aprire il popup di inserzione contatto
+			 */
+			public void actionPerformed(ActionEvent e) 
+			{
+				People mPeople = new People();
+				mPeople.setId_people(1);
+				mPeople.formGenerate();
+				mPeople.setVisible(true);
+				
+			}
+		});
 		mntmNuovoContantto.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/add.png")));
 		mnRubrica.add(mntmNuovoContantto);
 		
