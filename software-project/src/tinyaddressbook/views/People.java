@@ -27,6 +27,8 @@ import java.sql.SQLException;
 
 
 public class People extends JFrame {
+	public People() {
+	}
 
 	private JPanel contentPane;
 	private JTextField first_name;
@@ -83,7 +85,7 @@ public class People extends JFrame {
 		//Verifico se mi viene passatto un utente
 		if(this.getId_people() != null)
 		{
-			Database prova = new Database();
+			
 
 
 			

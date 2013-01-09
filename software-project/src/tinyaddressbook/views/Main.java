@@ -9,14 +9,24 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+
+import tinyaddressbook.model.Database;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
 public class Main extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
@@ -37,9 +47,18 @@ public class Main extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Main() 
+	public Main() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException 
 	{
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		
+		Database prova = new Database();
+		
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/book.png")));
 		setTitle("Tiny Address Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +77,10 @@ public class Main extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				
+				PeopleList mPeopleList =  new PeopleList();
+				setContentPane(mPeopleList.init());
+				validate();
+				repaint();
 			}
 		});
 		mntmTuttiIContatti.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/book_open.png")));
@@ -103,6 +125,12 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+//		PeopleList mPeopleList =  new PeopleList();
+//		setContentPane(mPeopleList.init());
 	}
+	
+	
 
+	
 }
