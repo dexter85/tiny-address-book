@@ -56,9 +56,7 @@ public class Main extends JFrame {
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
-		Database prova = new Database();
-		
-		
+			
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/book.png")));
 		setTitle("Tiny Address Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,9 +92,9 @@ public class Main extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent e) 
 			{
-				People mPeople = new People();
-				mPeople.setId_people(1);
-				mPeople.formGenerate();
+				PeopleSet mPeople = new PeopleSet();
+				mPeople.setId_people(null);
+				mPeople.init();
 				mPeople.setVisible(true);
 				
 			}
