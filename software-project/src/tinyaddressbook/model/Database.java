@@ -49,6 +49,39 @@ public class Database
 	}
 	
     
+    public ResultSet getPeople(String search)
+    {
+    	Statement statement = null;
+    	ResultSet resultSet = null;
+    	
+    	if("" == search)
+    		search = " WHERE first_name LIKE '%"+search+"%' OR last_name LIKE '%"+search+"%' ";
+    	
+		try 
+		{
+			statement = conn.createStatement();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+        
+		try 
+		{
+			return resultSet = statement.executeQuery("SELECT * FROM people__info "+search);
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultSet;  
+ 
+    }
+	
+	
+	
 	/**
 	 * 
 	 * Verifica se è  presente il driver per sqlite all'interno del progetto

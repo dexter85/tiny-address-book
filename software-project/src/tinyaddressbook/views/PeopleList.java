@@ -11,17 +11,22 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import tinyaddressbook.model.Database;
+
 import java.awt.Color;
 
 public class PeopleList 
 {
 	JPanel contentPane;
+	Database mDatabase ;
 	/**
 	 * @return 
 	 * @wbp.parser.entryPoint
 	 */
 	public PeopleList()
 	{
+		mDatabase = new Database();
+		
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.PINK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -47,6 +52,7 @@ public class PeopleList
   public  JScrollPane getList() 
   {
 
+	  System.out.println(mDatabase);
 
     final JTable table;
 
