@@ -11,6 +11,8 @@ public class Database
 {
 	public static String fileName = "database.sqlite";
 	private Connection conn;
+	private Statement stat;
+
 	
 	/**
 	 * Ogni volta che viene chiamato il db verifica se è presente un database
@@ -44,65 +46,177 @@ public class Database
 	            System.exit(1);
 	        }
 		}
-		
 		if(true == firstInser)
-		{
 			setStructure();
 			
-		}
+
 	}
+	
+	
+    public void setCalendar(String id_calendar, String id_people, String from, String to, String title, String description)
+    {
+		try 
+		{
+
+			stat = conn.createStatement();
+			String query = null;
+			if(id_calendar == "")
+	    	{
+	            query = "INSERT INTO calendar " +
+						" (id_people, 'from', 'to', title, description) " +
+						"VALUES " +
+						"('"+id_people+"', '"+from+"', '"+to+"', '"+title+"',  '"+description+"');";
+
+	    	}
+			else
+			{
+				 query = "UPDATE calendar SET " +
+							"id_people = '"+id_people+"'," +
+							"`from` = '"+from+"'," +
+							"`to` = '"+to+"'," +
+							"title = '"+title+"'," +
+							"description = '"+description+"'" +
+							" WHERE " +
+							"id_calendar = '"+id_calendar+"';";
+
+			}
+			
+			System.out.println(query);
+            stat.executeUpdate(query);
+            stat.close();
+    	
+		} catch (SQLException e) { e.printStackTrace(); }
+  
+    }
 	
 	/**
 	 * 
 	 * @param id_people
 	 * @return
 	 */
-    public ResultSet getPeopleByPrimary(Integer id_people)
-    {
-		String sql = "SELECT * FROM people WHERE id_people = '"+id_people.toString()+"'";
+	public ResultSet getCalendarByPrimary(Integer id_calendar)
+	{
+		String sql = "SELECT * FROM calendar_people WHERE id_calendar = '"+id_calendar.toString()+"'";
 		
-		System.out.println(sql);
 		
-    	ResultSet resultSet = null;
+		ResultSet resultSet = null;
 		try 
 		{
-			Statement stat;
 			stat = conn.createStatement();
-			
-
-
 			resultSet = stat.executeQuery(sql);
-			
-			return resultSet;
-
 			
 		} catch (SQLException e) { e.printStackTrace(); }
 		return resultSet;
+	
+	}
 
+    
+    
+	/**
+     * Restituisce i record della tabella people, se viene passata una stringa a ricerca
+     * cerca nel nome o nel cognome
+     * 
+     * @param search
+     * @return
+     */
+    public ResultSet getCalendar(String search)
+    {
+    	ResultSet resultSet = null;
+    	
+    	String where = "";
+    	if("" != search)
+    		where = " WHERE first_name LIKE '%"+search+"%' OR last_name LIKE '%"+search+"%'  OR title LIKE '%"+search+"%' OR description  LIKE '%"+search+"%' ";
+    	
+    	String query = "SELECT * FROM calendar_people "+where+" ORDER BY 'from','to' ASC";
+        
+		try 
+		{
+			stat = conn.createStatement();
+			resultSet = stat.executeQuery(query);			
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(query);
+		
+		return resultSet;  
+ 
     }
 	
-    
+	
+	
+	
+	
+	public boolean delCalendar(Integer id_calendar)
+	{
+		boolean mReturn = false; 
+		
+		try 
+		{
+			stat = conn.createStatement();
+			
+			String sql = "DELETE FROM calendar WHERE id_calendar = '"+id_calendar.toString()+"'";
+			int delete = stat.executeUpdate(sql);
+			
+			if(delete == 1)
+				mReturn = true;
+			
+			stat.close();
+			
+		} catch (SQLException e) { e.printStackTrace(); }
+	
+		return mReturn;
+	}
+
+	/**
+     * 
+     * @param id_people
+     * @param first_name
+     * @param last_name
+     * @param gender
+     * @param born
+     * @param phone
+     * @param email
+     * @param town
+     * @param street
+     * @param street_number
+     */
     public void setPeople(String id_people, String  first_name, String  last_name, String  gender, String born, String phone, String email, String town, String street, String street_number)
     {
 		try 
 		{
-			Statement stat;
+
 			stat = conn.createStatement();
-	    	
+			String query = null;
 			if(id_people == "")
 	    	{
-	            String insert = "INSERT INTO people " +
+	            query = "INSERT INTO people " +
 						" (first_name,last_name,gender,born,phone,email,town,street,street_number) " +
 						"VALUES " +
 						"('"+first_name+"', '"+last_name+"', '"+gender+"', '"+born+"', '"+phone+"', '"+email+"', '"+town+"', '"+street+"', '"+street_number+"');";
-	            System.out.println(insert);
-	            stat.executeUpdate(insert);
-	            stat.close();
+
 	    	}
 			else
 			{
-				
+				 query = "UPDATE people SET " +
+							"first_name = '"+first_name+"'," +
+							"last_name = '"+last_name+"'," +
+							"gender = '"+gender+"'," +
+							"born = '"+born+"'," +
+							"phone = '"+phone+"'," +
+							"email = '"+email+"'," +
+							"town = '"+town+"'," +
+							"street = '"+street+"'," +
+							"street_number = '"+street_number+"' " +
+							"WHERE " +
+							"id_people = '"+id_people+"';";
+
 			}
+            stat.executeUpdate(query);
+            stat.close();
     	
 		} catch (SQLException e) { e.printStackTrace(); }
     	
@@ -110,32 +224,27 @@ public class Database
     
 	
 	/**
-	 * Passato un id di una persona lo elinina
+	 * 
 	 * @param id_people
 	 * @return
 	 */
-	public boolean delPeople(Integer id_people)
+	public ResultSet getPeopleByPrimary(Integer id_people)
 	{
-		boolean mReturn = false; 
+		String sql = "SELECT * FROM people WHERE id_people = '"+id_people.toString()+"'";
 		
 		
+		ResultSet resultSet = null;
 		try 
 		{
-			Statement stat;
 			stat = conn.createStatement();
-			
-			String sql = "DELETE FROM people WHERE id_people = '"+id_people.toString()+"'";
-			int delete = stat.executeUpdate(sql);
-			
-			if(delete == 1)
-				mReturn = true;
+			resultSet = stat.executeQuery(sql);
 			
 		} catch (SQLException e) { e.printStackTrace(); }
-
-		return mReturn;
-	}
+		return resultSet;
 	
-    /**
+	}
+
+	/**
      * Restituisce i record della tabella people, se viene passata una stringa a ricerca
      * cerca nel nome o nel cognome
      * 
@@ -144,7 +253,6 @@ public class Database
      */
     public ResultSet getPeople(String search)
     {
-    	Statement statement = null;
     	ResultSet resultSet = null;
     	
     	String where = "";
@@ -152,20 +260,13 @@ public class Database
     		where = " WHERE first_name LIKE '%"+search+"%' OR last_name LIKE '%"+search+"%'  OR phone LIKE '%"+search+"%' ";
     	
     	String query = "SELECT * FROM people "+where+" ORDER BY last_name, first_name ASC";
+        
+    	
     	
 		try 
 		{
-			statement = conn.createStatement();
-		} 
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-        
-		try 
-		{
-			return resultSet = statement.executeQuery(query);
+			stat = conn.createStatement();
+			resultSet = stat.executeQuery(query);			
 		} 
 		catch (SQLException e) 
 		{
@@ -177,6 +278,48 @@ public class Database
     }
 	
 	
+	
+	/**
+	 * Passato un id di una persona lo elinina
+	 * @param id_people
+	 * @return
+	 */
+	public boolean delPeople(Integer id_people)
+	{
+		boolean mReturn = false; 
+		
+		try 
+		{
+			stat = conn.createStatement();
+			
+			String sql = "DELETE FROM people WHERE id_people = '"+id_people.toString()+"'";
+			int delete = stat.executeUpdate(sql);
+			
+			if(delete == 1)
+				mReturn = true;
+			
+			stat.close();
+			
+		} catch (SQLException e) { e.printStackTrace(); }
+	
+		return mReturn;
+	}
+	
+	public Integer count(ResultSet resultSet)
+	{
+		int size = 0;
+		try {
+		    resultSet.last();
+		    size = resultSet.getRow();
+		    resultSet.beforeFirst();
+		}
+		catch(Exception ex) {
+		    return 0;
+		}
+		
+		return size;
+	}
+
 	
 	/**
 	 * 
@@ -198,29 +341,39 @@ public class Database
     /**
      * Crea la struttura del database
      */
+  
+    
+    
+    
     private void setStructure()
     {
      System.out.println("Creazione Struttura");
 
         try
         {
-            Statement stat = conn.createStatement();
+            stat = conn.createStatement();
             
             //Creazione delle tabelle nel database
             stat.executeUpdate("CREATE TABLE people (id_people INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, gender TEXT, born TEXT, phone TEXT, email TEXT, town TEXT, street TEXT, street_number TEXT);");
+            stat.executeUpdate("CREATE  TABLE 'calendar' ('id_calendar' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , 'id_people' INTEGER, 'from' INTEGER, 'to' INTEGER, 'title' VARCHAR, 'description' text)");
             
+            //Creazione della view per visualizzare eventi e calendario
+            stat.executeUpdate("CREATE VIEW calendar_people AS SELECT people.*,  calendar.id_calendar,  calendar.'from', calendar.'to',  calendar.title,  calendar.description FROM calendar LEFT OUTER JOIN people ON people.id_people = calendar.id_people");
+            
+            //Creazione della trigger            
+            stat.executeUpdate("CREATE TRIGGER delete_people BEFORE DELETE ON people FOR EACH ROW BEGIN 	UPDATE calendar SET id_people = NULL WHERE calendar.id_people = OLD.id_people; END;");
             stat.close();
         }
         catch(SQLException e)
         {
-        	e.getErrorCode();
+         e.getErrorCode();
         }
         setDeveloperInser();
     }
     
-    /**
-     * Inserisce dei dati fitizzi per lo sviluppo
-     */
+	/**
+	* Inserisce dei dati fitizzi per lo sviluppo
+	*/
     private void setDeveloperInser()
     {
     	String[] firstName = new String[]{"John", "Thomas", "Samuel", "Chris", "Daniel", "Joey", "David", "Joshua", "Michael", "John"};
@@ -233,21 +386,21 @@ public class Database
             
             for(int i = 0;i<50;i++)
             {
-            	Statement stat = conn.createStatement();
-            	int randomNumber = random.nextInt(firstName.length);	
-            	String timestamp = String.valueOf(System.currentTimeMillis());            	
-            	
-	            String query = "INSERT INTO people " +
-						" (first_name,last_name,gender,born,phone,email,town,street,street_number) " +
-						"VALUES " +
-						"('"+firstName[randomNumber].toString()+"', 'Cognome', 'm', '"+timestamp+"', '"+random.nextInt()+"', 'test@test.it', 'Citta', 'Indirizzo', '"+random.nextInt()+"');";
-	            
-	            stat.executeUpdate(query);
-	            stat.close();
+             stat = conn.createStatement();
+             int randomNumber = random.nextInt(firstName.length);	
+             String timestamp = String.valueOf(System.currentTimeMillis());
+            
+			String query = "INSERT INTO people " +
+			" (first_name,last_name,gender,born,phone,email,town,street,street_number) " +
+			"VALUES " +
+			"('"+firstName[randomNumber].toString()+"', 'Cognome', 'm', '"+timestamp+"', '"+random.nextInt()+"', 'test@test.it', 'Citta', 'Indirizzo', '"+random.nextInt()+"');";
+			
+			stat.executeUpdate(query);
+			stat.close();
             }
 
             
         }
         catch(SQLException e){ e.getErrorCode(); }
-    }
+    }    
 }

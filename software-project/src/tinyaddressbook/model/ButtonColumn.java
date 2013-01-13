@@ -21,6 +21,10 @@ import javax.swing.table.*;
 public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4694178978698815004L;
 	private JTable table;
 	private Action action;
 	private int mnemonic;

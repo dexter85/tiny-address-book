@@ -17,7 +17,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-import com.sun.jmx.snmp.Timestamp;
 import com.toedter.calendar.JDateChooser;
 
 import tinyaddressbook.model.Database;
@@ -32,7 +31,10 @@ import java.util.Date;
 
 
 
-public class PeopleSet extends JFrame {
+public class PeopleSet extends JFrame 
+{
+	public PeopleSet() {
+	}
 //	public PeopleSet() {
 //	}
 
@@ -97,7 +99,7 @@ public class PeopleSet extends JFrame {
 		
 		String valFirst_name = "";
 		String valLast_name = "";
-		String valGender = "";
+		String valGender = "m";
 		String valPhone = "";
 		String valEmail = "";
 		String valTown = "";
@@ -130,12 +132,23 @@ public class PeopleSet extends JFrame {
 
 			} 
 			catch (SQLException e) {e.printStackTrace(); }
+			
+			 //Libero la connessione al database
+			try 
+			{
+				mResultSet.close();
+			} 
+			catch (SQLException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		setResizable(false);
 		
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(NewPeople.class.getResource("/tinyaddressbook/resources/user.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PeopleSet.class.getResource("/tinyaddressbook/resources/user.png")));
 		
 		
 		
@@ -159,8 +172,9 @@ public class PeopleSet extends JFrame {
 		
 		JLabel lblSesso = new JLabel("Sesso");
 		
-		JComboBox gender = new JComboBox();
+		final JComboBox gender = new JComboBox();
 		gender.setModel(new DefaultComboBoxModel(new String[] {"m", "f"}));
+		gender.setSelectedItem(valGender);
 		
 		JLabel lblDataDiNascita = new JLabel("Data di Nascita");
 		
@@ -213,7 +227,7 @@ public class PeopleSet extends JFrame {
 					mId_people = id_people.toString();
 				
 				Database mDatabase = new Database();
-				mDatabase.setPeople(mId_people, first_name.getText(), last_name.getText(), "c", String.valueOf(born.getDate().getTime()), phone.getText(), email.getText(), town.getText(), street.getText(), street_number.getText());
+				mDatabase.setPeople(mId_people, first_name.getText(), last_name.getText(), (String) gender.getSelectedItem(), String.valueOf(born.getDate().getTime()), phone.getText(), email.getText(), town.getText(), street.getText(), street_number.getText());
 				
 				
 				dispose();
@@ -222,7 +236,7 @@ public class PeopleSet extends JFrame {
 				
 			}
 		});
-		btnSalva.setIcon(new ImageIcon(NewPeople.class.getResource("/tinyaddressbook/resources/accept.png")));
+		btnSalva.setIcon(new ImageIcon(PeopleSet.class.getResource("/tinyaddressbook/resources/accept.png")));
 		
 		JButton btnAnulla = new JButton("Anulla");
 		btnAnulla.addActionListener(new ActionListener() {
@@ -231,7 +245,7 @@ public class PeopleSet extends JFrame {
 				dispose();
 			}
 		});
-		btnAnulla.setIcon(new ImageIcon(NewPeople.class.getResource("/tinyaddressbook/resources/action_stop.gif")));
+		btnAnulla.setIcon(new ImageIcon(PeopleSet.class.getResource("/tinyaddressbook/resources/action_stop.gif")));
 
 
 		

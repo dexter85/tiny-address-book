@@ -15,7 +15,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
-import tinyaddressbook.model.Database;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -54,9 +53,10 @@ public class Main extends JFrame {
 	 */
 	public Main() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException 
 	{
+		//Imposto il look di sistema
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
-			
+		//Icona dell'applicazione	
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/book.png")));
 		setTitle("Tiny Address Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,6 +97,13 @@ public class Main extends JFrame {
 				mPeople.init();
 				mPeople.setVisible(true);
 				
+				contentPane = new JPanel();
+				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+				contentPane.setLayout(new BorderLayout(0, 0));
+				setContentPane(contentPane);
+				validate();
+				repaint();
+				
 			}
 		});
 		mntmNuovoContantto.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/add.png")));
@@ -106,19 +113,38 @@ public class Main extends JFrame {
 		menuBar.add(mnCalendario);
 		
 		JMenuItem mntmTuttiGliEventi = new JMenuItem("Tutti gli eventi");
+		mntmTuttiGliEventi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				CalendarList mCalendarList =  new CalendarList();
+				setContentPane(mCalendarList.init());
+				validate();
+				repaint();
+			}
+		});
 		mntmTuttiGliEventi.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/calendar_view_day.png")));
 		mnCalendario.add(mntmTuttiGliEventi);
 		
 		JMenuItem mntmNuovoEvento = new JMenuItem("Nuovo Evento");
+		mntmNuovoEvento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				CalendarSet mCalendarSet = new CalendarSet();
+				mCalendarSet.setId_calendar(null);
+				mCalendarSet.init();
+				mCalendarSet.setVisible(true);	
+				
+				contentPane = new JPanel();
+				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+				contentPane.setLayout(new BorderLayout(0, 0));
+				setContentPane(contentPane);
+				validate();
+				repaint();
+				
+			}
+		});
 		mntmNuovoEvento.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/add.png")));
 		mnCalendario.add(mntmNuovoEvento);
-		
-		JMenu mnNewMenu = new JMenu("?");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmInformazioni = new JMenuItem("Informazioni su Tiny Adrress Book");
-		mntmInformazioni.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/icon_info.gif")));
-		mnNewMenu.add(mntmInformazioni);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

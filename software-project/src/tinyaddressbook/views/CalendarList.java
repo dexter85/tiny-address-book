@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import tinyaddressbook.model.ButtonColumn;
 import tinyaddressbook.model.Database;
 
-public class PeopleList 
+public class CalendarList 
 {
 	JPanel contentPane;
 	Database mDatabase ;
@@ -42,7 +43,7 @@ public class PeopleList
 	 * @return 
 	 * @wbp.parser.entryPoint
 	*/
-	public PeopleList()
+	public CalendarList()
 	{
 		mDatabase = new Database();
 		
@@ -123,7 +124,7 @@ public class PeopleList
 	  
 	  
 	  //Header della tabella
-	  String[] columnTitles = { "Cognome", "Nome", "Sesso",  "Telefono", "E-Mail", "Città", "Indirizzo", "Civico", "Modifica", "Elimina" };
+	  String[] columnTitles = { "Dal", "Al", "titolo",  "Con",  "Modifica", "Elimina" };
 	  
 	  //Inizializzo il contenuto della tabella
 	  Object[][] rowData =null;
@@ -138,7 +139,7 @@ public class PeopleList
 	  table = new JTable(model);
 	  
 	  //Prelevo i dati dal database
-	  ResultSet rs = mDatabase.getPeople(search);
+	  ResultSet rs = mDatabase.getCalendar(search);
 	  
 	  
 	  try 
@@ -152,20 +153,24 @@ public class PeopleList
 		{
 
 				//Popolo l'hasMap
-				rowKey.put(i, rs.getInt("id_people"));
+				rowKey.put(i, rs.getInt("id_calendar"));
+				
+				
+				String with = "";
+				if(rs.getString("id_people") != null)
+					with = rs.getString("last_name")+" "+rs.getString("first_name");
+				
+				Date from 	= new Date(Long.parseLong(rs.getString("from")));
+				Date to 	= new Date(Long.parseLong(rs.getString("to")));
 				
 				//Inserisco i dati nella tablla
 				model.insertRow(table.getRowCount(),new Object[]{
-				   	rs.getString("last_name"),
-				   	rs.getString("first_name"), 
-				   	rs.getString("gender"), 
-				   	rs.getString("phone"), 
-				   	rs.getString("email"),
-				   	rs.getString("town"),
-				   	rs.getString("street"),
-				   	rs.getString("street_number"),
-				   	"Modifica "+rs.getString("last_name"),
-				   	"Elimina "+rs.getString("last_name"),
+					from.toLocaleString(),
+				   	to.toLocaleString(), 
+				   	rs.getString("title"), 
+				   	with, 
+				   	"Modifica "+rs.getString("title"),
+				   	"Elimina "+rs.getString("title"),
 				});
 				
 				//Incremento il contatore
@@ -196,14 +201,14 @@ public class PeopleList
 			  int modelRow = Integer.valueOf( e.getActionCommand() );
             
 			  //Chiamo la classe per il modifica
-			  PeopleSet mPeopleSet = new PeopleSet();
+			  CalendarSet mCalendarSet = new CalendarSet();
 			  
 			  //Passo la chiave del db
-			  mPeopleSet.setId_people(rowKey.get(modelRow));
+			  mCalendarSet.setId_calendar(rowKey.get(modelRow));
 			  
 			  //Avvio l'interfaccia
-			  mPeopleSet.init();
-			  mPeopleSet.setVisible(true);
+			  mCalendarSet.init();
+			  mCalendarSet.setVisible(true);
 		  }
 	  };     
     
@@ -221,14 +226,14 @@ public class PeopleList
 		{
 			//Chiedo conferma
 			JFrame frame = new JFrame();
-		    int result = JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler eliminare questo Contatto?");
+		    int result = JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler eliminare questo Evento?");
 		    
 		    if(result == 0)
 		    {
 //				JTable table = (JTable)e.getSource();
 				int modelRow = Integer.valueOf( e.getActionCommand());
 				
-				if(true == mDatabase.delPeople(rowKey.get(modelRow)))
+				if(true == mDatabase.delCalendar(rowKey.get(modelRow)))
 				{
 					//Aggiorno la tabella
 					updateList(textField.getText());
@@ -240,11 +245,11 @@ public class PeopleList
 	};
     
 	//Associo il bottone aggiorna
-    ButtonColumn buttonColumnUpd = new ButtonColumn(table, update, 8);
+    ButtonColumn buttonColumnUpd = new ButtonColumn(table, update, 4);
     buttonColumnUpd.setMnemonic(KeyEvent.VK_D);
     
     //Associo il bottone elimina
-    ButtonColumn buttonColumnDel = new ButtonColumn(table, delete, 9);
+    ButtonColumn buttonColumnDel = new ButtonColumn(table, delete, 5);
     buttonColumnDel.setMnemonic(KeyEvent.VK_D);
     
     

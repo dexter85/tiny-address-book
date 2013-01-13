@@ -29,12 +29,10 @@ CREATE  INDEX "index__people__info" ON "people__info" ("first_name" ASC, "last_n
 
 	
 -- Creazione trigger e comportamento eliminazione --
-CREATE TRIGGER delete_people__info
-BEFORE DELETE ON people__info
+CREATE TRIGGER delete_people
+BEFORE DELETE ON people
 FOR EACH ROW BEGIN
-	DELETE FROM  people__emails WHERE people__emails.id_people = OLD.id_people;
-	DELETE FROM  people__phones WHERE people__phones.id_people = OLD.id_people;
-	DELETE FROM  calendar__people WHERE calendar__people.id_people = OLD.id_people;
+	UPDATE calendar SET id_people = NULL WHERE calendar.id_people = OLD.id_people;
 END;
 
 CREATE TRIGGER delete_calendar__info
