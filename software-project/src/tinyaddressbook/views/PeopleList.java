@@ -5,6 +5,8 @@ package tinyaddressbook.views;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -204,6 +206,56 @@ public class PeopleList
 			  //Avvio l'interfaccia
 			  mPeopleSet.init();
 			  mPeopleSet.setVisible(true);
+			  
+			  
+			  //Avvio il listener in attessa della chiusura	
+			  mPeopleSet.addWindowListener( new WindowListener() {
+                  @Override
+                  public void windowClosing(WindowEvent we) {
+
+                  }
+
+					@Override
+					public void windowActivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						// Alla chiusura del popUp Aggiorno la lista
+						updateList(textField.getText());
+					}
+
+
+					@Override
+					public void windowDeactivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowIconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowOpened(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+              } );
+			  
 		  }
 	  };     
     

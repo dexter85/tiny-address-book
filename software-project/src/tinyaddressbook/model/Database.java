@@ -2,6 +2,9 @@ package tinyaddressbook.model;
 
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.*;
 import java.util.Random;
 
@@ -369,7 +372,7 @@ public class Database
         {
          e.getErrorCode();
         }
-        setDeveloperInser();
+//        setDeveloperInser();
     }
     
 	/**
@@ -413,14 +416,12 @@ public class Database
     private String getFileName()
     {
     	
-    	
-    	String mFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).toString().replace(".jar", "");
-    	
-    	mFile = mFile+"db.sqlite";
-    	
-    	return mFile;
+    	String mPath = System.getProperty("user.dir").toString()+"/database.sqlite";
 
-    	
+//    	System.out.println(mPath);
+//    	System.exit(0);
+ 
+    	return mPath;
     	
     }
 }
