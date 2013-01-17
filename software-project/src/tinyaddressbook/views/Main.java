@@ -18,6 +18,14 @@ import javax.swing.ImageIcon;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import java.awt.SystemColor;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 public class Main extends JFrame {
@@ -57,15 +65,17 @@ public class Main extends JFrame {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		//Icona dell'applicazione	
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/book.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/tinyaddressbook/resources/main_addressbook.png")));
 		setTitle("Tiny Address Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 640, 480);
+		setBounds(100, 100, 709, 386);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
 		JMenu mnRubrica = new JMenu("Rubrica");
+		mnRubrica.setBackground(SystemColor.windowBorder);
+		mnRubrica.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/book.png")));
 		menuBar.add(mnRubrica);
 		
 		JMenuItem mntmTuttiIContatti = new JMenuItem("Tutti i Contatti");
@@ -75,10 +85,7 @@ public class Main extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				PeopleList mPeopleList =  new PeopleList();
-				setContentPane(mPeopleList.init());
-				validate();
-				repaint();
+				repaintPeopleList();
 			}
 		});
 		mntmTuttiIContatti.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/book_open.png")));
@@ -92,17 +99,59 @@ public class Main extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent e) 
 			{
+				
 				PeopleSet mPeople = new PeopleSet();
 				mPeople.setId_people(null);
 				mPeople.init();
 				mPeople.setVisible(true);
 				
-				contentPane = new JPanel();
-				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-				contentPane.setLayout(new BorderLayout(0, 0));
-				setContentPane(contentPane);
-				validate();
-				repaint();
+				mPeople.addWindowListener( new WindowListener() {
+                    @Override
+                    public void windowClosing(WindowEvent we) {
+
+                    }
+
+					@Override
+					public void windowActivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						repaintPeopleList();
+					}
+
+
+					@Override
+					public void windowDeactivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowIconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowOpened(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+                } );
+							
 				
 			}
 		});
@@ -110,16 +159,14 @@ public class Main extends JFrame {
 		mnRubrica.add(mntmNuovoContantto);
 		
 		JMenu mnCalendario = new JMenu("Calendario");
+		mnCalendario.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/calendar_view_day.png")));
 		menuBar.add(mnCalendario);
 		
 		JMenuItem mntmTuttiGliEventi = new JMenuItem("Tutti gli eventi");
 		mntmTuttiGliEventi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				CalendarList mCalendarList =  new CalendarList();
-				setContentPane(mCalendarList.init());
-				validate();
-				repaint();
+				repaintCalendarList();
 			}
 		});
 		mntmTuttiGliEventi.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/calendar_view_day.png")));
@@ -133,28 +180,134 @@ public class Main extends JFrame {
 				mCalendarSet.setId_calendar(null);
 				mCalendarSet.init();
 				mCalendarSet.setVisible(true);	
+
+				mCalendarSet.addWindowListener( new WindowListener() {
+                    @Override
+                    public void windowClosing(WindowEvent we) {
+
+                    }
+
+					@Override
+					public void windowActivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						repaintCalendarList();
+					}
+
+
+					@Override
+					public void windowDeactivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowIconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+						
+					}
+
+					@Override
+					public void windowOpened(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+                } );
 				
-				contentPane = new JPanel();
-				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-				contentPane.setLayout(new BorderLayout(0, 0));
-				setContentPane(contentPane);
-				validate();
-				repaint();
+				
+
 				
 			}
 		});
 		mntmNuovoEvento.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/add.png")));
 		mnCalendario.add(mntmNuovoEvento);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
 		
+		emptyBackground();
 //		PeopleList mPeopleList =  new PeopleList();
 //		setContentPane(mPeopleList.init());
 	}
 	
-	
+	/**
+	 * 
+	 */
+	public void repaintPeopleList()
+	{
+		PeopleList mPeopleList =  new PeopleList();
+		setContentPane(mPeopleList.init());
+		validate();
+		repaint();
+	}
 
+	public void repaintCalendarList()
+	{
+		CalendarList mCalendarList =  new CalendarList();
+		setContentPane(mCalendarList.init());
+		validate();
+		repaint();
+	}
+	
+	/**
+	 * 
+	 */
+	public void emptyBackground()
+	{
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				repaintPeopleList();
+			}
+		});
+		btnNewButton.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/main_addressbook_open.png")));
+		
+		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				repaintCalendarList();
+			}
+		});
+		btnNewButton_1.setIcon(new ImageIcon(Main.class.getResource("/tinyaddressbook/resources/main_calendar_open.png")));
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnNewButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+					.addComponent(btnNewButton_1)
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(21)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton_1)
+						.addComponent(btnNewButton))
+					.addContainerGap(31, Short.MAX_VALUE))
+		);
+		contentPane.setLayout(gl_contentPane);
+		validate();
+		repaint();
+	}
 	
 }

@@ -7,23 +7,24 @@ import java.util.Random;
 
 import org.sqlite.SQLiteConfig;
 
+import tinyaddressbook.views.Main;
+
 public class Database 
 {
-	public static String fileName = "database.sqlite";
 	private Connection conn;
 	private Statement stat;
 
 	
 	/**
-	 * Ogni volta che viene chiamato il db verifica se è presente un database
-	 * e se nn è presente ne crea uno nuovo
+	 * Ogni volta che viene chiamato il db verifica se ï¿½ presente un database
+	 * e se nn ï¿½ presente ne crea uno nuovo
 	 */
 	public Database() 
 	{
 		boolean firstInser;
 		
-		//Verifico se è presente il file del database
-		if(false == new File(fileName).isFile())
+		//Verifico se ï¿½ presente il file del database
+		if(false == new File(this.getFileName()).isFile())
 			firstInser = true;
 		else
 			firstInser = false;
@@ -38,7 +39,7 @@ public class Database
 	        try
 	        {
 	        	//Connessione
-	            conn = DriverManager.getConnection("jdbc:sqlite:"+fileName, config.toProperties());
+	            conn = DriverManager.getConnection("jdbc:sqlite:"+this.getFileName(), config.toProperties());
 	        } 
 	        catch(SQLException e)
 	        {
@@ -323,7 +324,7 @@ public class Database
 	
 	/**
 	 * 
-	 * Verifica se è  presente il driver per sqlite all'interno del progetto
+	 * Verifica se ï¿½  presente il driver per sqlite all'interno del progetto
 	 * 
 	 * @return {@link Boolean}
 	 */
@@ -402,5 +403,24 @@ public class Database
             
         }
         catch(SQLException e){ e.getErrorCode(); }
-    }    
+    }
+    
+    
+    /**
+     * Restituisce il path del jar
+     * @return
+     */
+    private String getFileName()
+    {
+    	
+    	
+    	String mFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).toString().replace(".jar", "");
+    	
+    	mFile = mFile+"db.sqlite";
+    	
+    	return mFile;
+
+    	
+    	
+    }
 }

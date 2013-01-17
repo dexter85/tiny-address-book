@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -226,11 +227,22 @@ public class PeopleSet extends JFrame
 				if(id_people != null)
 					mId_people = id_people.toString();
 				
-				Database mDatabase = new Database();
-				mDatabase.setPeople(mId_people, first_name.getText(), last_name.getText(), (String) gender.getSelectedItem(), String.valueOf(born.getDate().getTime()), phone.getText(), email.getText(), town.getText(), street.getText(), street_number.getText());
+				if(first_name.getText().length() != 0 || last_name.getText().length() != 0 )
+				{
+					Database mDatabase = new Database();
+					mDatabase.setPeople(mId_people, first_name.getText(), last_name.getText(), (String) gender.getSelectedItem(), String.valueOf(born.getDate().getTime()), phone.getText(), email.getText(), town.getText(), street.getText(), street_number.getText());
+					dispose();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Attenzione il campo nome o cognome è obbligatorio!");
+					
+					if(first_name.getText().length() == 0)
+						first_name.requestFocus();
+					else
+						last_name.requestFocus();
 				
-				
-				dispose();
+				}
 				
 				
 				

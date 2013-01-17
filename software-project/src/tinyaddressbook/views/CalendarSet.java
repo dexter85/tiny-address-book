@@ -3,6 +3,7 @@ package tinyaddressbook.views;
 import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
@@ -15,7 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import com.lavantech.gui.comp.DateTimePicker;
 import com.toedter.calendar.JDateChooser;
+
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -34,8 +38,8 @@ public class CalendarSet extends JFrame {
 	}
 
 	private JPanel contentPane;
-	private JDateChooser from;
-	private JDateChooser to;
+	private DateTimePicker from;
+	private DateTimePicker to;
 	private JLabel lblAssociaAUn;
 	private JTextField title;
 	private JTextArea description;
@@ -116,6 +120,16 @@ public class CalendarSet extends JFrame {
 			
 
 		}
+		else
+		{
+			 Calendar cal = Calendar.getInstance(); // creates calendar
+			 cal.setTime(new Date()); // sets calendar time/date
+			 cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+			 valFrom.setTime(cal.getTimeInMillis());
+			 cal.add(Calendar.HOUR_OF_DAY, 1); 
+			 valTo.setTime(cal.getTimeInMillis());
+//			 valTo.setTime(Long.parseLong(cal.getTime()));
+		}
 		//Prelevo tutti gli utenti
 		Database mDatabase = new Database();
 		
@@ -161,10 +175,10 @@ public class CalendarSet extends JFrame {
 		
 		JLabel lblDal = new JLabel("Dal");
 		
-		from = new  JDateChooser(valFrom);
+		from = new  DateTimePicker(valFrom,  "d/m/Y HH:mm:ss");
 //		from.setColumns(10);
 		
-		to = new  JDateChooser(valTo);
+		to = new  DateTimePicker(valTo,  "d/m/Y HH:mm:ss");
 //		to.setColumns(10);
 		
 		JLabel lblAl = new JLabel("Al");
@@ -208,11 +222,18 @@ public class CalendarSet extends JFrame {
 				 if(valueSelect != 0)
 					 id_user =  String.valueOf(valueSelect);
 				 
-				 
-				Database mDatabase = new Database();
-				mDatabase.setCalendar(mId_Calendar, id_user, String.valueOf(from.getDate().getTime()), String.valueOf(to.getDate().getTime()), title.getText(),description.getText());
-
-				dispose();
+				if(title.getText().length() != 0)
+				{
+					Database mDatabase = new Database();
+					mDatabase.setCalendar(mId_Calendar, id_user, String.valueOf(from.getDate().getTime()), String.valueOf(to.getDate().getTime()), title.getText(),description.getText());
+					dispose();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Attenzione il campo titole è obbligatorio!");
+					title.requestFocus();
+				}
+				
 				
 			}
 		});

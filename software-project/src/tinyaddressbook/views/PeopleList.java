@@ -123,7 +123,7 @@ public class PeopleList
 	  
 	  
 	  //Header della tabella
-	  String[] columnTitles = { "Cognome", "Nome", "Sesso",  "Telefono", "E-Mail", "Citt‡", "Indirizzo", "Civico", "Modifica", "Elimina" };
+	  String[] columnTitles = { "Cognome", "Nome", "Sesso",  "Telefono", "E-Mail", "Citt√†", "Indirizzo", "Civico", "Modifica", "Elimina" };
 	  
 	  //Inizializzo il contenuto della tabella
 	  Object[][] rowData =null;
